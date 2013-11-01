@@ -1,3 +1,9 @@
 *~
+*.o
+*.swp
+*.out
 References/
-test*
+test/
+cscope*
+tags
+refresh.sh
