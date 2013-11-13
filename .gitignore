@@ -7,3 +7,4 @@ test/
 cscope*
 tags
 refresh.sh
+*.gch
