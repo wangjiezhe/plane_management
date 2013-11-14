@@ -6,7 +6,7 @@
 #include <time.h>
 
 struct flight {
-	char flight_name[6];
+	char flight_name[7];
 	time_t landing_deadline;
 };
 

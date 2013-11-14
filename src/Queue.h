@@ -1,14 +1,26 @@
 #ifndef QUEUE_H_
 #define QUEUE_H_
 
+#include <stdio.h>
+#include <stdlib.h>
+
+struct ground {
+	char flight_name[7];
+	time_t landing_time;
+};
+
+typedef struct ground DataType_q;
+
 struct SeqQueue{
 	int MAXNUM;
 	int f,r;
 	DataType_q *q;
+//	time_t last_in_time;
+//	time_t last_out_time;
 };
 typedef struct SeqQueue * PSeqQueue;
 
-PSeqQueue createEmptyQueue_seq (int m) {
+PSeqQueue createEmptyQueue (int m) {
 	PSeqQueue paqu;
 	paqu = (PSeqQueue)malloc(sizeof(struct SeqQueue));
 	if (paqu != NULL) {
@@ -16,6 +28,7 @@ PSeqQueue createEmptyQueue_seq (int m) {
 		if (paqu->q) {
 			paqu->MAXNUM = m;
 			paqu->f = paqu->r = 0;
+//			paqu->last_in_time = paqu->last_out_time = -1;
 			return paqu;
 		}
 		else
@@ -25,11 +38,15 @@ PSeqQueue createEmptyQueue_seq (int m) {
 	return NULL;
 }
 
-int isEmptyQueue_seq (PSeqQueue paqu) {
+int isEmptyQueue (PSeqQueue paqu) {
 	return (paqu->f == paqu->r);
 }
 
-void enQueue_seq (PSeqQueue paqu, DataType_q x) {
+int isFullQueue (PSeqQueue paqu) {
+	return ((paqu->r +1) % paqu->MAXNUM == paqu->f);
+}
+
+void enQueue (PSeqQueue paqu, DataType_q x) {
 	if ((paqu->r + 1) % paqu->MAXNUM == paqu->f)
 		printf("Full queue!\n");
 	else {
@@ -38,79 +55,20 @@ void enQueue_seq (PSeqQueue paqu, DataType_q x) {
 	}
 }
 
-void deQueue_seq (PSeqQueue paqu) {
+void deQueue (PSeqQueue paqu) {
 	if (paqu->f == paqu->r)
 		printf("Empty queue!\n");
 	else
 		paqu->f = (paqu->f + 1) % paqu->MAXNUM;
 }
 
-DataType_q frontQueue_seq (PSeqQueue paqu) {
-	if (paqu->f == paqu->r)
+DataType_q frontQueue (PSeqQueue paqu) {
+	if (paqu->f == paqu->r) {
 		printf("Empty queue!\n");
+	}
 	else
 		return (paqu->q[paqu->f]);
 }
 
-
-struct Node;
-typedef struct Node * PNode;
-struct Node {
-	DataType_q info;
-	PNode link;
-};
-struct LinkQueue {
-	PNode f;
-	PNode r;
-};
-typedef struct LinkQueue * PLinkQueue;
-
-PLinkQueue createEmptyQueue_link (void) {
-	PLinkQueue plqu;
-	plqu = (PLinkQueue)malloc(sizeof(struct LinkQueue));
-	if (plqu != NULL)
-		plqu->f = plqu->r = NULL;
-	else
-		printf("Out of Space!\n");
-	return plqu;
-}
-
-int isEmptyQueue_link (PLinkQueue plqu) {
-	return (plqu->f == NULL);
-}
-
-void enQueue_link (PLinkQueue plqu, DataType_q x) {
-	PNode p;
-	p = (PNode)malloc(sizeof(struct Node));
-	if (p == NULL)
-		printf("Out of Space!\n");
-	else {
-		p->info = x;
-		p->link = NULL;
-		if (plqu->f == NULL)
-			plqu->f = p;
-		else
-			plqu->r->link = p;
-		plqu->r = p;
-	}
-}
-
-void deQueue_link(PLinkQueue plqu, DataType_q x) {
-	PNode p;
-	if (plqu->f == NULL)
-		printf("Empty queue!\n");
-	else {
-		p = plqu->f;
-		plqu->f = p->link;
-		free(p);
-	}
-}
-
-DataType_q frontQueue_link(PLinkQueue plqu) {
-	if (plqu->f == NULL)
-		printf("Emmpty queue!\n");
-	else
-		return (plqu->f->info);
-}
 
 #endif	/* Queue.h */
