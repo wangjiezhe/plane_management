@@ -6,12 +6,12 @@
 #include "PriorityQueue.h"
 #include "Queue.h"
 #include "data.h"
-#include "runway.h"
+//#include "runway.h"
 //#include "gtkitems.h"
 
 PPriorityQueue waiting;
 PSeqQueue reseting;
-prunway way_up, way_down;
+//prunway way_up, way_down;
 DataType_pq flight_landing;
 
 GtkWidget *status_bar;
@@ -22,25 +22,25 @@ GTimer *dialog_timer;
 GtkWidget *text1, *text2, *text3;
 GtkTextBuffer *buffer1, *buffer2, *buffer3;
 GtkTextIter iter1, iter2, iter3;
+GtkTextMark *mark1, *mark2, *mark3;
 
 typedef struct _ProgressData {
 	GtkWidget *pbar;
 	int timer;
-	gboolean activity_mode;
 } ProgressData;
 
 ProgressData *pdata2, pdata3;
 
-int is_ok_to_land (PSeqQueue paqu) {
-	time_t now = time(NULL);
-	return (!isFullQueue(paqu)
-			&& way_down->status == 0
-			&& difftime(way_down->last_time, now) > t_db);
-}
+//int is_ok_to_land (PSeqQueue paqu) {
+//	time_t now = time(NULL);
+//	return (!isFullQueue(paqu)
+//			&& way_down->status == 0
+//			&& difftime(way_down->last_time, now) > t_db);
+//}
 
-int is_ok_to_take_off () {
-	return ;
-}
+//int is_ok_to_take_off () {
+//	return ;
+//}
 
 GtkWidget *make_menu_item (GtkWidget *menu, gchar *item_text,
 		GCallback callbackfunc, gpointer data) {
@@ -126,6 +126,8 @@ void dialog_ok_clicked (GtkWidget *widget, gpointer data) {
 	sprintf(num, "%d", waiting->n);
 	gtk_text_buffer_insert (buffer1, &iter1, num, -1);
 	gtk_text_buffer_insert (buffer1, &iter1, "\n", -1);
+	gtk_text_buffer_move_mark (buffer1, mark1, &iter1);
+	gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW(text1), mark1, 0.0, TRUE, 0.0, 1.0);
 
 //	if (waiting->n == 1) {
 //		if (is_ok_to_land(reseting))
@@ -209,37 +211,40 @@ void new_plane_arrived (GtkWidget *widget, gpointer data) {
 gint progress_timeout2 (gpointer data) {
 	ProgressData *pdata = (ProgressData *)data;
 	gdouble new_val;
-	if (pdata->activity_mode)
-		gtk_progress_bar_pulse (GTK_PROGRESS_BAR(pdata->pbar));
-	else {
-		new_val = gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR(pdata->pbar))+ 0.5;	/* testing */
-//		new_val = gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR(pdata->pbar)) + 1/((t_d+t_db)*60);
-		if (new_val >= 1.0) {
-			new_val = 0.0;
-			g_source_remove (pdata->timer);
-			DataType_q temp;
-			strcpy (temp.flight_name, flight_landing.flight_name);
-			temp.landing_time = time(NULL);
-			enQueue(reseting, temp);
-			if (!isFullQueue(reseting))
-				gtk_widget_set_sensitive (table2, TRUE);
-		}
-		gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(pdata->pbar), new_val);
+	new_val = gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR(pdata->pbar))+ 0.5;	/* testing */
+//	new_val = gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR(pdata->pbar)) + 1/((t_d+t_db)*60);
+	if (new_val >= 1.0) {
+		new_val = 0.0;
+		g_source_remove (pdata->timer);
+		DataType_q temp;
+		strcpy (temp.flight_name, flight_landing.flight_name);
+		temp.landing_time = time(NULL);
+		enQueue(reseting, temp);
+		if (!isFullQueue(reseting))
+			gtk_widget_set_sensitive (table2, TRUE);
 	}
+	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(pdata->pbar), new_val);
 	return TRUE;
 }
 
 /* callback function for button "Ok to land" */
 void new_plane_to_land (GtkWidget *widget, gpointer data) {
-	way_down->status = 1;
-	way_down->last_time = time(NULL);
+//	way_down->status = 1;
+//	way_down->last_time = time(NULL);
+	if (isEmpty_heap(waiting)) {
+		gtk_text_buffer_insert (buffer2, &iter2, "\nNo plane is waiting for landing.\n", -1);
+		gtk_text_buffer_move_mark (buffer2, mark2, &iter2);
+		gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW(text2), mark2, 0.0, TRUE, 0.0, 1.0);
+		return ;
+	}
 	flight_landing = waiting->pq[0];
 	removeMin_heap (waiting);
 	gtk_text_buffer_insert (buffer2, &iter2, "\nA new plane is landing...", -1);
 	gtk_text_buffer_insert (buffer2, &iter2, "\nFlight No. :", -1);
 	gtk_text_buffer_insert (buffer2, &iter2, flight_landing.flight_name, -1);
 	gtk_text_buffer_insert (buffer2, &iter2, "\n", -1);
-//	alarm
+	gtk_text_buffer_move_mark (buffer2, mark2, &iter2);
+	gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW(text2), mark2, 0.0, TRUE, 0.0, 1.0);
 	pdata2->timer = g_timeout_add (1000, progress_timeout2, pdata2);
 	gtk_widget_set_sensitive (table2, FALSE);
 	return;
@@ -268,8 +273,8 @@ gint main (gint argc, gchar *argv[]) {
 
 	waiting = create_heap (MPD);
 	reseting = createEmptyQueue (APRONS+1);
-	way_up = create_new_runway();
-	way_down = create_new_runway();
+//	way_up = create_new_runway();
+//	way_down = create_new_runway();
 	pdata2 = g_malloc (sizeof(ProgressData));
 
 //	if(!g_thread_get_initialized()) g_thread_init(NULL);
@@ -351,6 +356,7 @@ gint main (gint argc, gchar *argv[]) {
 	gtk_container_add (GTK_CONTAINER(scrolled_window), text1);
 	buffer1 = gtk_text_view_get_buffer (GTK_TEXT_VIEW(text1));
 	gtk_text_buffer_get_iter_at_offset (buffer1, &iter1, 0);
+	mark1 = gtk_text_buffer_create_mark (buffer1, NULL, &iter1, TRUE);
 	gtk_widget_show (text1);
 
 	gtk_widget_show(scrolled_window);
@@ -384,6 +390,7 @@ gint main (gint argc, gchar *argv[]) {
 	gtk_container_add (GTK_CONTAINER(scrolled_window), text2);
 	buffer2 = gtk_text_view_get_buffer (GTK_TEXT_VIEW(text2));
 	gtk_text_buffer_get_iter_at_offset (buffer2, &iter2, 0);
+	mark2 = gtk_text_buffer_create_mark (buffer2, NULL, &iter2, TRUE);
 	gtk_widget_show (text2);
 
 	gtk_widget_show(scrolled_window);
