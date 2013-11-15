@@ -12,13 +12,24 @@
 PPriorityQueue waiting;
 PSeqQueue reseting;
 prunway way_up, way_down;
+DataType_pq flight_landing;
 
 GtkWidget *status_bar;
+//GtkWidget *button1, *button2, *button3;
+GtkWidget *table1, *table2, *table3;
 GtkWidget *entry1, *entry2;
 GTimer *dialog_timer;
 GtkWidget *text1, *text2, *text3;
 GtkTextBuffer *buffer1, *buffer2, *buffer3;
 GtkTextIter iter1, iter2, iter3;
+
+typedef struct _ProgressData {
+	GtkWidget *pbar;
+	int timer;
+	gboolean activity_mode;
+} ProgressData;
+
+ProgressData *pdata2, pdata3;
 
 int is_ok_to_land (PSeqQueue paqu) {
 	time_t now = time(NULL);
@@ -79,7 +90,7 @@ GtkWidget *make_table_with_button (gchar *label, GCallback callbackfunc) {
 }
 
 void dialog_ok_clicked (GtkWidget *widget, gpointer data) {
-	time_t temp;
+//	time_t temp;
 	gchar oil_text[7];
 	DataType_pq flight;
 	gdouble remaining_time;
@@ -116,24 +127,24 @@ void dialog_ok_clicked (GtkWidget *widget, gpointer data) {
 	gtk_text_buffer_insert (buffer1, &iter1, num, -1);
 	gtk_text_buffer_insert (buffer1, &iter1, "\n", -1);
 
-	if (waiting->n == 1) {
-		if (is_ok_to_land(reseting))
-			gtk_text_buffer_insert (buffer2, &iter2, "\nIt's ready for a new plane to land.\n", -1);
-		else if (!isFullQueue(reseting))
-			if (way_down->status == 1) {
-				while (1)
-					if (difftime(way_down->last_time, time(NULL)) > t_d) break;
-				temp = time(NULL);
-				while (1)
-					if (difftime(temp, time(NULL)) > t_db) break;
-				gtk_text_buffer_insert (buffer2, &iter2, "\nIt's ready for a new plane to land.\n", -1);
-			}
-			else {
-				while (1)
-					if (difftime(way_down->last_time, time(NULL)) > t_db) break;
-				gtk_text_buffer_insert (buffer2, &iter2, "\nIt's ready for a new plane to land.\n", -1);
-			}
-	}
+//	if (waiting->n == 1) {
+//		if (is_ok_to_land(reseting))
+//			gtk_text_buffer_insert (buffer2, &iter2, "\nIt's ready for a new plane to land.\n", -1);
+//		else if (!isFullQueue(reseting))
+//			if (way_down->status == 1) {
+//				while (1)
+//					if (difftime(way_down->last_time, time(NULL)) > t_d) break;
+//				temp = time(NULL);
+//				while (1)
+//					if (difftime(temp, time(NULL)) > t_db) break;
+//				gtk_text_buffer_insert (buffer2, &iter2, "\nIt's ready for a new plane to land.\n", -1);
+//			}
+//			else {
+//				while (1)
+//					if (difftime(way_down->last_time, time(NULL)) > t_db) break;
+//				gtk_text_buffer_insert (buffer2, &iter2, "\nIt's ready for a new plane to land.\n", -1);
+//			}
+//	}
 	return ;
 }
 
@@ -195,9 +206,31 @@ void new_plane_arrived (GtkWidget *widget, gpointer data) {
 	return;
 }
 
+gint progress_timeout2 (gpointer data) {
+	ProgressData *pdata = (ProgressData *)data;
+	gdouble new_val;
+	if (pdata->activity_mode)
+		gtk_progress_bar_pulse (GTK_PROGRESS_BAR(pdata->pbar));
+	else {
+		new_val = gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR(pdata->pbar))+ 0.5;	/* testing */
+//		new_val = gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR(pdata->pbar)) + 1/((t_d+t_db)*60);
+		if (new_val >= 1.0) {
+			new_val = 0.0;
+			g_source_remove (pdata->timer);
+			DataType_q temp;
+			strcpy (temp.flight_name, flight_landing.flight_name);
+			temp.landing_time = time(NULL);
+			enQueue(reseting, temp);
+			if (!isFullQueue(reseting))
+				gtk_widget_set_sensitive (table2, TRUE);
+		}
+		gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(pdata->pbar), new_val);
+	}
+	return TRUE;
+}
+
 /* callback function for button "Ok to land" */
 void new_plane_to_land (GtkWidget *widget, gpointer data) {
-	DataType_pq flight_landing;
 	way_down->status = 1;
 	way_down->last_time = time(NULL);
 	flight_landing = waiting->pq[0];
@@ -207,6 +240,8 @@ void new_plane_to_land (GtkWidget *widget, gpointer data) {
 	gtk_text_buffer_insert (buffer2, &iter2, flight_landing.flight_name, -1);
 	gtk_text_buffer_insert (buffer2, &iter2, "\n", -1);
 //	alarm
+	pdata2->timer = g_timeout_add (1000, progress_timeout2, pdata2);
+	gtk_widget_set_sensitive (table2, FALSE);
 	return;
 }
 
@@ -226,14 +261,22 @@ gint main (gint argc, gchar *argv[]) {
 	GtkWidget *vboxin;
 //	GtkWidget *button;
 	GtkWidget *scrolled_window;
-	GtkWidget *table;
+//	GtkWidget *table;
+	GtkWidget *align;
 
 	guint context_id;
 
 	waiting = create_heap (MPD);
-	reseting = createEmptyQueue (APRONS);
+	reseting = createEmptyQueue (APRONS+1);
 	way_up = create_new_runway();
 	way_down = create_new_runway();
+	pdata2 = g_malloc (sizeof(ProgressData));
+
+//	if(!g_thread_get_initialized()) g_thread_init(NULL);
+//	g_thread_init();
+	gdk_threads_init ();
+
+	gdk_threads_enter ();
 
 	/* init the GTK */
 	gtk_init (&argc, &argv);
@@ -295,8 +338,8 @@ gint main (gint argc, gchar *argv[]) {
 	vboxin = gtk_vbox_new (FALSE, 5);
 	gtk_box_pack_start (GTK_BOX(hbox), vboxin, TRUE, TRUE, 2);
 
-	table = make_table_with_button ("New plane arrived", G_CALLBACK(new_plane_arrived));
-	gtk_box_pack_start(GTK_BOX(vboxin), table, FALSE, FALSE, 2);
+	table1 = make_table_with_button ("New plane arrived", G_CALLBACK(new_plane_arrived));
+	gtk_box_pack_start(GTK_BOX(vboxin), table1, FALSE, FALSE, 2);
 
 	scrolled_window = gtk_scrolled_window_new (NULL, NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(scrolled_window),
@@ -319,8 +362,16 @@ gint main (gint argc, gchar *argv[]) {
 	vboxin = gtk_vbox_new (FALSE, 5);
 	gtk_box_pack_start (GTK_BOX(hbox), vboxin, TRUE, TRUE, 2);
 
-	table = make_table_with_button ("New plane to land", G_CALLBACK(new_plane_to_land));
-	gtk_box_pack_start(GTK_BOX(vboxin), table, FALSE, FALSE, 2);
+	table2 = make_table_with_button ("New plane to land", G_CALLBACK(new_plane_to_land));
+	gtk_box_pack_start (GTK_BOX(vboxin), table2, FALSE, FALSE, 2);
+
+	align = gtk_alignment_new (0.5, 0.5, 0, 0);
+	gtk_box_pack_start (GTK_BOX(vboxin), align, FALSE, FALSE, 2);
+	gtk_widget_show (align);
+
+	pdata2->pbar = gtk_progress_bar_new ();
+	gtk_container_add (GTK_CONTAINER(align), pdata2->pbar);
+	gtk_widget_show (pdata2->pbar);
 
 	scrolled_window = gtk_scrolled_window_new (NULL, NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(scrolled_window),
@@ -344,8 +395,8 @@ gint main (gint argc, gchar *argv[]) {
 	vboxin = gtk_vbox_new (FALSE, 5);
 	gtk_box_pack_start (GTK_BOX(hbox), vboxin, TRUE, TRUE, 2);
 
-	table = make_table_with_button ("New plane to take off", G_CALLBACK(new_plane_to_take_off));
-	gtk_box_pack_start(GTK_BOX(vboxin), table, FALSE, FALSE, 2);
+	table3 = make_table_with_button ("New plane to take off", G_CALLBACK(new_plane_to_take_off));
+	gtk_box_pack_start(GTK_BOX(vboxin), table3, FALSE, FALSE, 2);
 
 	scrolled_window = gtk_scrolled_window_new (NULL, NULL);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW(scrolled_window),
@@ -374,6 +425,7 @@ gint main (gint argc, gchar *argv[]) {
 	gtk_widget_show (window);
 
 	gtk_main ();
+	gdk_threads_leave ();
 
 	return 0;
 }
