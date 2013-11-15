@@ -70,7 +70,7 @@ void about_called (GtkWidget *widget, gpointer data) {
 	gtk_about_dialog_set_program_name (
 			GTK_ABOUT_DIALOG(about_dialog), "PLANE MANAGEMENT");
 	gtk_about_dialog_set_version (
-			GTK_ABOUT_DIALOG(about_dialog), "1.0.0");
+			GTK_ABOUT_DIALOG(about_dialog), "1.1.0");
 	gtk_about_dialog_set_license (
 			GTK_ABOUT_DIALOG(about_dialog), "GPLv3");
 	gtk_about_dialog_set_wrap_license (
