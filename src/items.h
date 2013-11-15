@@ -70,7 +70,7 @@ void about_called (GtkWidget *widget, gpointer data) {
 	gtk_about_dialog_set_program_name (
 			GTK_ABOUT_DIALOG(about_dialog), "PLANE MANAGEMENT");
 	gtk_about_dialog_set_version (
-			GTK_ABOUT_DIALOG(about_dialog), "0.1.0");
+			GTK_ABOUT_DIALOG(about_dialog), "1.0.0");
 	gtk_about_dialog_set_license (
 			GTK_ABOUT_DIALOG(about_dialog), "GPLv3");
 	gtk_about_dialog_set_wrap_license (
@@ -102,7 +102,6 @@ void dialog_ok_clicked (GtkWidget *widget, gpointer data) {
 	DataType_pq flight;
 	gdouble remaining_time;
 	gdouble dialog_time;
-//	gchar num[4];
 	const gchar *entry1_text = g_utf8_strup (
 			g_locale_to_utf8(gtk_entry_get_text(GTK_ENTRY(entry1)), -1, NULL, NULL, NULL), -1);
 	const gchar *entry2_text =
@@ -128,9 +127,6 @@ void dialog_ok_clicked (GtkWidget *widget, gpointer data) {
 	gtk_text_buffer_insert_with_tags_by_name (buffer1, &iter1, entry1_text, -1, "bold", NULL);
 	gtk_text_buffer_insert (buffer1, &iter1, "\nRemaining oil(/L): ", -1);
 	gtk_text_buffer_insert_with_tags_by_name (buffer1, &iter1, entry2_text, -1, "bold", NULL);
-//	gtk_text_buffer_insert (buffer1, &iter1, "\nPlanes waiting to land: ", -1);
-//	sprintf(num, "%d", waiting->n);
-//	gtk_text_buffer_insert_with_tags_by_name (buffer1, &iter1, num, -1, "bold", NULL);
 	gtk_text_buffer_insert (buffer1, &iter1, "\n", -1);
 	sprintf (waiting_label_text, "Waiting: %d", waiting->n);
 	gtk_label_set_text(GTK_LABEL(waiting_label), waiting_label_text);
@@ -217,8 +213,8 @@ void alarm_handler () {
 gint progress_timeout2 (gpointer data) {
 	ProgressData *pdata = (ProgressData *)data;
 	gdouble new_val;
-	new_val = gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR(pdata->pbar))+ 0.5;	/* testing */
-//	new_val = gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR(pdata->pbar)) + 1/((t_d+t_db)*60);
+//	new_val = gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR(pdata->pbar))+ 0.5;	/* testing */
+	new_val = gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR(pdata->pbar)) + 1/((t_d+t_db)*60);
 	if (new_val >= 1.0) {
 		new_val = 0.0;
 		g_source_remove (pdata->timer);
@@ -229,15 +225,11 @@ gint progress_timeout2 (gpointer data) {
 		runway_down = 0;
 		gtk_text_buffer_insert_with_tags_by_name (
 				buffer2, &iter2, "\nSucceed!\n ", -1, "notify", NULL);
-//		gtk_text_buffer_insert_with_tags_by_name (
-//				buffer2, &iter2, temp.flight_name, -1, "notify", NULL);
-//		gtk_text_buffer_insert_with_tags_by_name (
-//				buffer2, &iter2, " has successfully landed.\n", -1, "notify", NULL);
 		gtk_text_buffer_move_mark (buffer2, mark2, &iter2);
 		gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW(text2), mark2, 0.0, TRUE, 0.0, 1.0);
 		if (isOnlyOneInQueue(reseting))
-			alarm(5);	/* testing */
-//			alarm(t_r);
+//			alarm(5);	/* testing */
+			alarm(t_r);
 		if (!isFullQueue(reseting))
 			gtk_widget_set_sensitive (table2, TRUE);
 	}
@@ -249,24 +241,20 @@ gint progress_timeout3 (gpointer data) {
 	ProgressData *pdata = (ProgressData *)data;
 	gdouble new_val;
 	DataType_q temp;
-	new_val = gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR(pdata->pbar)) + 0.5;	/* testing */
-//	new_val = gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR(pdata->pbar)) + 1/((t_u+t_ub)*60);
+//	new_val = gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR(pdata->pbar)) + 0.5;	/* testing */
+	new_val = gtk_progress_bar_get_fraction (GTK_PROGRESS_BAR(pdata->pbar)) + 1/((t_u+t_ub)*60);
 	if (new_val >= 1.0) {
 		new_val = 0.0;
 		g_source_remove (pdata->timer);
 		runway_up = 0;
 		gtk_text_buffer_insert_with_tags_by_name (
 				buffer3, &iter3, "\nSucceed!\n ", -1, "notify", NULL);
-//		gtk_text_buffer_insert_with_tags_by_name (
-//				buffer3, &iter3, temp.flight_name, -1, "notify", NULL);
-//		gtk_text_buffer_insert_with_tags_by_name (
-//				buffer3, &iter3, " has successfully taken off.\n", -1, "notify", NULL);
 		gtk_text_buffer_move_mark (buffer3, mark3, &iter3);
 		gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW(text3), mark3, 0.0, TRUE, 0.0, 1.0);
 		if (!isEmptyQueue(reseting)) {
-			alarm (5);	/* testing */
-//			temp = frontQueue(reseting);
-//			alarm (t_r - (time(NULL) - temp.landing_time);
+//			alarm (5);	/* testing */
+			temp = frontQueue(reseting);
+			alarm (t_r - (time(NULL) - temp.landing_time));
 			}
 		}
 	gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR(pdata->pbar), new_val);
@@ -275,8 +263,6 @@ gint progress_timeout3 (gpointer data) {
 
 /* callback function for button "Ok to land" */
 void new_plane_to_land (GtkWidget *widget, gpointer data) {
-//	way_down->status = 1;
-//	way_down->last_time = time(NULL);
 	if (isEmpty_heap(waiting)) {
 		gtk_text_buffer_insert_with_tags_by_name (
 				buffer2, &iter2, "\nNo plane is waiting for landing.\n", -1, "error", NULL);

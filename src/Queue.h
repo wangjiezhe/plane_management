@@ -12,8 +12,6 @@ struct SeqQueue{
 	int MAXNUM;
 	int f,r;
 	DataType_q *q;
-//	time_t last_in_time;
-//	time_t last_out_time;
 };
 typedef struct SeqQueue * PSeqQueue;
 
@@ -44,7 +42,7 @@ int isFullQueue (PSeqQueue paqu) {
 }
 
 int isOnlyOneInQueue (PSeqQueue paqu) {
-	return (paqu->f + 1 == paqu->r);
+	return ((paqu->f + 1) % paqu->MAXNUM == paqu->r);
 }
 
 void enQueue (PSeqQueue paqu, DataType_q x) {
