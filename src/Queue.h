@@ -46,6 +46,10 @@ int isFullQueue (PSeqQueue paqu) {
 	return ((paqu->r +1) % paqu->MAXNUM == paqu->f);
 }
 
+int isOnlyOneInQueue (PSeqQueue paqu) {
+	return (paqu->f + 1 == paqu->r);
+}
+
 void enQueue (PSeqQueue paqu, DataType_q x) {
 	if ((paqu->r + 1) % paqu->MAXNUM == paqu->f)
 		printf("Full queue!\n");
