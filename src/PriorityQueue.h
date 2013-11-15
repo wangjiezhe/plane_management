@@ -1,9 +1,5 @@
 #ifndef PRIORITY_QUEUE_H_
-#define PRIORITY_QUEUE_H_
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
+#define PRIORITY_QUEUE_H_ 0
 
 struct flight {
 	char flight_name[7];

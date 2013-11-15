@@ -1,8 +1,5 @@
 #ifndef QUEUE_H_
-#define QUEUE_H_
-
-#include <stdio.h>
-#include <stdlib.h>
+#define QUEUE_H_ 0
 
 struct ground {
 	char flight_name[7];

@@ -10,5 +10,5 @@ CFLAGS = -Wall			 	\
 main: main.c
 	$(CC) main.c -o main $(CFLAGS) `pkg-config gtk+-2.0 gthread-2.0 --cflags --libs`
 
-clean: 
+clean:
 	rm -f *.o main
