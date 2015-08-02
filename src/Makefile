@@ -8,20 +8,22 @@ CFLAGS = -Wall			 	\
 
 objects = main.o items.o Queue.o PriorityQueue.o
 
-GTKFLAGS = $(CFLAGS) `pkg-config gtk+-2.0 gthread-2.0 --cflags --libs`
+GTKFLAGS = `pkg-config gtk+-2.0 gthread-2.0 --cflags --libs`
 
 .PHONY: all
-all: $(objects)
-	$(CC) -o main.out $(objects) $(GTKFLAGS)
+all: main $(objects)
+
+main: $(objects)
+	$(CC) -o main.out $(objects) $(CFLAGS) $(GTKFLAGS)
 
 main.o: main.c
-	$(CC) -c main.c $(GTKFLAGS)
+	$(CC) -c main.c $(CFLAGS) $(GTKFLAGS)
 
-items.o: items.h
-	$(CC) -c items.c $(GTKFLAGS)
+items.o: items.c items.h
+	$(CC) -c items.c $(CFLAGS) $(GTKFLAGS)
 
-Queue.o: Queue.h
-PriorityQueue.o: PriorityQueue.h
+Queue.o: Queue.c Queue.h
+PriorityQueue.o: PriorityQueue.c PriorityQueue.h
 
 .PHONY: clean
 clean:
