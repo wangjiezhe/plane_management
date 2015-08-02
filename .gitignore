@@ -1,15 +1,13 @@
 *~
-*.o
 *.swp
-*.out
 References/
 test/
 cscope*
 tags
 refresh.sh
 *.gch
-README
 
+*.o
 *.lib
 *.a
 

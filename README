@@ -1,0 +1,18 @@
+Author: 王介哲
+E-mail: wangjiezhe1993@163.com
+
+Character Encoding: UTF-8
+Line Ending: Unix/Linux
+
+Compilation:
+gcc (GCC) 4.8.2 20131017 (Red Hat 4.8.2-1)
+Copyright (C) 2013 Free Software Foundation, Inc.
+
+Environment:
+OS: Fedora 19 Schrödinger’s Cat
+Kernel: x86_64 Linux 3.11.7-200.fc19.x86_64
+CPU: Intel Core i5-2430M CPU @ 3GHz
+
+Libs:
+gtk2-2.24.22-2.fc19.x86_64
+glib2-2.36.3-3.fc19.x86_64
