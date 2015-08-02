@@ -1,4 +1,3 @@
-
 #include <gtk/gtk.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,7 +6,6 @@
 #include "Queue.h"
 #include "data.h"
 #include "items.h"
-
 
 gint main (gint argc, gchar *argv[]) {
 	GtkWidget *window;
