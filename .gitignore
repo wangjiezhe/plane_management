@@ -9,7 +9,6 @@ tags
 refresh.sh
 *.gch
 README
-Report.md
 
 *.lib
 *.a
