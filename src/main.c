@@ -1,7 +1,10 @@
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+// #include <libintl.h>
+// #include <locale.h>
 #include "PriorityQueue.h"
 #include "Queue.h"
 #include "data.h"
@@ -28,6 +31,11 @@ gint main (gint argc, gchar *argv[]) {
 
 	signal (SIGALRM, alarm_handler);
 
+	// setlocale("LC_ALL", "");
+	bindtextdomain(PACKAGE, LOCALEDIR);
+	bindtextdomain(PACKAGE, "UTF-8");
+	textdomain(PACKAGE);
+
 //	if(!g_thread_get_initialized()) g_thread_init(NULL);
 //	g_thread_init();
 	gdk_threads_init ();
@@ -39,7 +47,7 @@ gint main (gint argc, gchar *argv[]) {
 
 	/* create a new window */
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_title (GTK_WINDOW(window), "PLANE MANAGEMENT");
+	gtk_window_set_title (GTK_WINDOW(window), _("PLANE MANAGEMENT"));
 	gtk_window_set_position (GTK_WINDOW(window), GTK_WIN_POS_CENTER);
 	gtk_window_set_default_size(GTK_WINDOW(window), 1024, 768);
 	gtk_container_set_border_width (GTK_CONTAINER (window), 20);
@@ -58,10 +66,10 @@ gint main (gint argc, gchar *argv[]) {
 	menu = gtk_menu_new ();
 
 	/* create menu-items under the root-menu */
-	menu_item = make_menu_item (menu, "About", G_CALLBACK(about_called), window);
-	menu_item = make_menu_item (menu, "Quit", G_CALLBACK(gtk_main_quit), window);
+	menu_item = make_menu_item (menu, _("About"), G_CALLBACK(about_called), window);
+	menu_item = make_menu_item (menu, _("Quit"), G_CALLBACK(gtk_main_quit), window);
 	/* this is the root-menu and will be displayed on the menu-bar */
-	root_menu = gtk_menu_item_new_with_label("Menu");
+	root_menu = gtk_menu_item_new_with_label(_("Menu"));
 	gtk_widget_show (root_menu);
 
 	/* menu we created is the menu for the root-menu */
@@ -95,10 +103,10 @@ gint main (gint argc, gchar *argv[]) {
 	gtk_box_pack_start (GTK_BOX(hbox), vboxin, TRUE, TRUE, 2);
 	gtk_widget_show (vboxin);
 
-	table1 = make_table_with_button ("New plane arrived", G_CALLBACK(new_plane_arrived));
+	table1 = make_table_with_button (_("New plane arrived"), G_CALLBACK(new_plane_arrived));
 	gtk_box_pack_start(GTK_BOX(vboxin), table1, FALSE, FALSE, 2);
 
-	sprintf(waiting_label_text, "Waiting: 0");
+	sprintf(waiting_label_text, _("Waiting: 0"));
 	waiting_label = gtk_label_new (waiting_label_text);
 	gtk_box_pack_start (GTK_BOX(vboxin), waiting_label, FALSE, FALSE, 2);
 	gtk_widget_show (waiting_label);
@@ -128,7 +136,7 @@ gint main (gint argc, gchar *argv[]) {
 	gtk_box_pack_start (GTK_BOX(hbox), vboxin, TRUE, TRUE, 2);
 	gtk_widget_show (vboxin);
 
-	table2 = make_table_with_button ("New plane to land", G_CALLBACK(new_plane_to_land));
+	table2 = make_table_with_button (_("New plane to land"), G_CALLBACK(new_plane_to_land));
 	gtk_box_pack_start (GTK_BOX(vboxin), table2, FALSE, FALSE, 2);
 
 	align = gtk_alignment_new (0.5, 0.5, 0, 0);
@@ -169,7 +177,7 @@ gint main (gint argc, gchar *argv[]) {
 	gtk_box_pack_start (GTK_BOX(hbox), vboxin, TRUE, TRUE, 2);
 	gtk_widget_show (vboxin);
 
-	table3 = make_table_with_button ("New plane to take off", G_CALLBACK(new_plane_to_take_off));
+	table3 = make_table_with_button (_("New plane to take off"), G_CALLBACK(new_plane_to_take_off));
 	gtk_widget_set_sensitive (table3, FALSE);
 	gtk_box_pack_start(GTK_BOX(vboxin), table3, FALSE, FALSE, 2);
 

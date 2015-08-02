@@ -1,0 +1,155 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-08-02 16:19+0800\n"
+"PO-Revision-Date: 2015-08-02 16:19+0800\n"
+"Last-Translator: Wang Jiezhe <wangjiezhe@gmail.com>\n"
+"Language-Team: \n"
+"Language: zh_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.8.2\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: ../main.c:48 ../items.c:29
+msgid "PLANE MANAGEMENT"
+msgstr "飞机场管理程序"
+
+#: ../main.c:67
+msgid "About"
+msgstr "关于"
+
+#: ../main.c:68
+msgid "Quit"
+msgstr "退出"
+
+#: ../main.c:70
+msgid "Menu"
+msgstr "菜单"
+
+#: ../main.c:104
+msgid "New plane arrived"
+msgstr "新飞机到达"
+
+#: ../main.c:107
+#, c-format
+msgid "Waiting: 0"
+msgstr "等待数： 0"
+
+#: ../main.c:137
+msgid "New plane to land"
+msgstr "新飞机降落"
+
+#: ../main.c:178
+msgid "New plane to take off"
+msgstr "新飞机起飞"
+
+#: ../items.c:25
+msgid "Wang Jiezhe"
+msgstr "王介哲"
+
+#: ../items.c:83
+msgid ""
+"\n"
+"New plane added into waiting queue."
+msgstr ""
+"\n"
+"新飞机已被加入到等待序列中。"
+
+#: ../items.c:84 ../items.c:160 ../items.c:254
+msgid ""
+"\n"
+"Flight No.: "
+msgstr ""
+"\n"
+"飞机班号： "
+
+#: ../items.c:86
+msgid ""
+"\n"
+"Remaining oil(/L): "
+msgstr ""
+"\n"
+"剩余油量（/L）： "
+
+#: ../items.c:89 ../items.c:234
+#, c-format
+msgid "Waiting: %d"
+msgstr "等待： %d"
+
+#: ../items.c:126
+msgid "New Plane"
+msgstr "新飞机"
+
+#: ../items.c:128
+msgid "Ok"
+msgstr "好的"
+
+#: ../items.c:134
+msgid "Cancel"
+msgstr "取消"
+
+#: ../items.c:143
+msgid "Flight No. :"
+msgstr "飞机班号："
+
+#: ../items.c:147
+msgid "Oil (/L) :"
+msgstr "油量（/L）： "
+
+#: ../items.c:158
+msgid ""
+"\n"
+"A new plane is ready to take off"
+msgstr ""
+"\n"
+"一架新飞机已经准备好起飞了"
+
+#: ../items.c:185 ../items.c:209
+msgid ""
+"\n"
+"Succeed!\n"
+" "
+msgstr ""
+"\n"
+"成功！\n"
+" "
+
+#: ../items.c:226
+msgid ""
+"\n"
+"No plane is waiting for landing.\n"
+msgstr ""
+"\n"
+"没有飞机正等待降落。\n"
+
+#: ../items.c:236
+msgid ""
+"\n"
+"A new plane is landing..."
+msgstr ""
+"\n"
+"一架新飞机正在降落……"
+
+#: ../items.c:237
+msgid ""
+"\n"
+"Flight No. :"
+msgstr ""
+"\n"
+"飞机班号："
+
+#: ../items.c:253
+msgid ""
+"\n"
+"A new plane is taking off..."
+msgstr ""
+"\n"
+"一架新飞机正在起飞……"

@@ -6,6 +6,7 @@ cscope*
 tags
 refresh.sh
 *.gch
+plane_management
 
 *.o
 *.lib

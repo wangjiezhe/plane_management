@@ -1,6 +1,9 @@
 #include <gtk/gtk.h>
+#include <glib/gi18n.h>
 #include <stdlib.h>
 #include <string.h>
+// #include <libintl.h>
+// #include <locale.h>
 #include "PriorityQueue.h"
 #include "Queue.h"
 #include "data.h"
@@ -20,11 +23,11 @@ GtkWidget *make_menu_item (GtkWidget *menu, gchar *item_text,
 void about_called (GtkWidget *widget, gpointer data) {
 	GtkWidget *about_dialog;
 	const gchar *authors[] = {
-		"Wang Jiezhe"
+		N_("Wang Jiezhe")
 	};
 	about_dialog = gtk_about_dialog_new();
 	gtk_about_dialog_set_program_name (
-			GTK_ABOUT_DIALOG(about_dialog), "PLANE MANAGEMENT");
+			GTK_ABOUT_DIALOG(about_dialog), _("PLANE MANAGEMENT"));
 	gtk_about_dialog_set_version (
 			GTK_ABOUT_DIALOG(about_dialog), "1.1.1");
 	gtk_about_dialog_set_license (
@@ -78,13 +81,13 @@ void dialog_ok_clicked (GtkWidget *widget, gpointer data) {
 	g_timer_destroy (dialog_timer);
 	add_heap (waiting, flight);
 
-	gtk_text_buffer_insert (buffer1, &iter1, "\nNew plane added into waiting queue.", -1);
-	gtk_text_buffer_insert (buffer1, &iter1, "\nFlight No.: ", -1);
+	gtk_text_buffer_insert (buffer1, &iter1, _("\nNew plane added into waiting queue."), -1);
+	gtk_text_buffer_insert (buffer1, &iter1, _("\nFlight No.: "), -1);
 	gtk_text_buffer_insert_with_tags_by_name (buffer1, &iter1, entry1_text, -1, "bold", NULL);
-	gtk_text_buffer_insert (buffer1, &iter1, "\nRemaining oil(/L): ", -1);
+	gtk_text_buffer_insert (buffer1, &iter1, _("\nRemaining oil(/L): "), -1);
 	gtk_text_buffer_insert_with_tags_by_name (buffer1, &iter1, entry2_text, -1, "bold", NULL);
 	gtk_text_buffer_insert (buffer1, &iter1, "\n", -1);
-	sprintf (waiting_label_text, "Waiting: %d", waiting->n);
+	sprintf (waiting_label_text, _("Waiting: %d"), waiting->n);
 	gtk_label_set_text(GTK_LABEL(waiting_label), waiting_label_text);
 	gtk_text_buffer_move_mark (buffer1, mark1, &iter1);
 	gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW(text1), mark1, 0.0, TRUE, 0.0, 1.0);
@@ -121,15 +124,15 @@ void new_plane_arrived (GtkWidget *widget, gpointer data) {
 	g_timer_start(dialog_timer);
 
 	dialog = gtk_dialog_new();
-	gtk_window_set_title (GTK_WINDOW(dialog), "New Plane");
+	gtk_window_set_title (GTK_WINDOW(dialog), _("New Plane"));
 	gtk_window_set_modal (GTK_WINDOW(dialog), TRUE);
-	button = gtk_button_new_with_label ("Ok");
+	button = gtk_button_new_with_label (_("Ok"));
 	g_signal_connect (G_OBJECT(button), "clicked",
 			G_CALLBACK(dialog_ok_clicked), dialog);
 	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area),
 			button, TRUE, TRUE, 0);
 	gtk_widget_show (button);
-	button = gtk_button_new_with_label ("Cancel");
+	button = gtk_button_new_with_label (_("Cancel"));
 	g_signal_connect (G_OBJECT(button), "clicked",
 			G_CALLBACK(dialog_cancel_clicked), dialog);
 	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->action_area),
@@ -138,11 +141,11 @@ void new_plane_arrived (GtkWidget *widget, gpointer data) {
 
 	entry1 = gtk_entry_new ();
 	gtk_entry_set_max_length (GTK_ENTRY(entry1), 6);
-	entryhbox = make_entryhbox_with_label (entry1, "Flight No. :");
+	entryhbox = make_entryhbox_with_label (entry1, _("Flight No. :"));
 	gtk_box_pack_start (GTK_BOX(GTK_DIALOG(dialog)->vbox), entryhbox, TRUE, TRUE, 2);
 
 	entry2 = gtk_entry_new ();
-	entryhbox = make_entryhbox_with_label (entry2, "Oil (/L) :");
+	entryhbox = make_entryhbox_with_label (entry2, _("Oil (/L) :"));
 	gtk_box_pack_start (GTK_BOX(GTK_DIALOG(dialog)->vbox), entryhbox, TRUE, TRUE, 2);
 
 	gtk_widget_show (dialog);
@@ -153,9 +156,9 @@ void new_plane_arrived (GtkWidget *widget, gpointer data) {
 void alarm_handler () {
 	DataType_q temp;
 	gtk_text_buffer_insert_with_tags_by_name (
-			buffer3, &iter3, "\nA new plane is ready to take off", -1, "notify", NULL);
+			buffer3, &iter3, _("\nA new plane is ready to take off"), -1, "notify", NULL);
 	gtk_text_buffer_insert_with_tags_by_name (
-			buffer3, &iter3, "\nFlight No.: ", -1, "notify", NULL);
+			buffer3, &iter3, _("\nFlight No.: "), -1, "notify", NULL);
 	temp = frontQueue(reseting);
 	gtk_text_buffer_insert_with_tags_by_name (
 			buffer3, &iter3, temp.flight_name, -1, "notify", NULL);
@@ -180,7 +183,7 @@ gint progress_timeout2 (gpointer data) {
 		enQueue(reseting, temp);
 		runway_down = 0;
 		gtk_text_buffer_insert_with_tags_by_name (
-				buffer2, &iter2, "\nSucceed!\n ", -1, "notify", NULL);
+				buffer2, &iter2, _("\nSucceed!\n "), -1, "notify", NULL);
 		gtk_text_buffer_move_mark (buffer2, mark2, &iter2);
 		gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW(text2), mark2, 0.0, TRUE, 0.0, 1.0);
 		if (isOnlyOneInQueue(reseting))
@@ -204,7 +207,7 @@ gint progress_timeout3 (gpointer data) {
 		g_source_remove (pdata->timer);
 		runway_up = 0;
 		gtk_text_buffer_insert_with_tags_by_name (
-				buffer3, &iter3, "\nSucceed!\n ", -1, "notify", NULL);
+				buffer3, &iter3, _("\nSucceed!\n "), -1, "notify", NULL);
 		gtk_text_buffer_move_mark (buffer3, mark3, &iter3);
 		gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW(text3), mark3, 0.0, TRUE, 0.0, 1.0);
 		if (!isEmptyQueue(reseting)) {
@@ -221,7 +224,7 @@ gint progress_timeout3 (gpointer data) {
 void new_plane_to_land (GtkWidget *widget, gpointer data) {
 	if (isEmpty_heap(waiting)) {
 		gtk_text_buffer_insert_with_tags_by_name (
-				buffer2, &iter2, "\nNo plane is waiting for landing.\n", -1, "error", NULL);
+				buffer2, &iter2, _("\nNo plane is waiting for landing.\n"), -1, "error", NULL);
 		gtk_text_buffer_move_mark (buffer2, mark2, &iter2);
 		gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW(text2), mark2, 0.0, TRUE, 0.0, 1.0);
 		return ;
@@ -229,10 +232,10 @@ void new_plane_to_land (GtkWidget *widget, gpointer data) {
 	runway_down = 1;
 	flight_landing = waiting->pq[0];
 	removeMin_heap (waiting);
-	sprintf (waiting_label_text, "Waiting: %d", waiting->n);
+	sprintf (waiting_label_text, _("Waiting: %d"), waiting->n);
 	gtk_label_set_text(GTK_LABEL(waiting_label), waiting_label_text);
-	gtk_text_buffer_insert (buffer2, &iter2, "\nA new plane is landing...", -1);
-	gtk_text_buffer_insert (buffer2, &iter2, "\nFlight No. :", -1);
+	gtk_text_buffer_insert (buffer2, &iter2, _("\nA new plane is landing..."), -1);
+	gtk_text_buffer_insert (buffer2, &iter2, _("\nFlight No. :"), -1);
 	gtk_text_buffer_insert_with_tags_by_name (
 			buffer2, &iter2, flight_landing.flight_name, -1, "bold", NULL);
 	gtk_text_buffer_insert (buffer2, &iter2, "\n", -1);
@@ -248,8 +251,8 @@ void new_plane_to_take_off (GtkWidget *widget, gpointer data) {
 	runway_up = 1;
 	flight_takingoff = frontQueue (reseting);
 	deQueue (reseting);
-	gtk_text_buffer_insert (buffer3, &iter3, "\nA new plane is taking off...", -1);
-	gtk_text_buffer_insert (buffer3, &iter3, "\nFlight No.: ", -1);
+	gtk_text_buffer_insert (buffer3, &iter3, _("\nA new plane is taking off..."), -1);
+	gtk_text_buffer_insert (buffer3, &iter3, _("\nFlight No.: "), -1);
 	gtk_text_buffer_insert_with_tags_by_name (
 			buffer3, &iter3, flight_takingoff.flight_name, -1, "bold", NULL);
 	gtk_text_buffer_insert (buffer3, &iter3, "\n", -1);

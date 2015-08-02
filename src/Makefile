@@ -14,7 +14,7 @@ GTKFLAGS = `pkg-config gtk+-2.0 gthread-2.0 --cflags --libs`
 all: main $(objects)
 
 main: $(objects)
-	$(CC) -o main.out $(objects) $(CFLAGS) $(GTKFLAGS)
+	$(CC) -o plane_management $(objects) $(CFLAGS) $(GTKFLAGS)
 
 main.o: main.c
 	$(CC) -c main.c $(CFLAGS) $(GTKFLAGS)
@@ -27,4 +27,4 @@ PriorityQueue.o: PriorityQueue.c PriorityQueue.h
 
 .PHONY: clean
 clean:
-	-rm *.o main.out
+	-rm *.o plane_management

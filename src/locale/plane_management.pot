@@ -1,0 +1,135 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-08-02 16:18+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../main.c:48 ../items.c:29
+msgid "PLANE MANAGEMENT"
+msgstr ""
+
+#: ../main.c:67
+msgid "About"
+msgstr ""
+
+#: ../main.c:68
+msgid "Quit"
+msgstr ""
+
+#: ../main.c:70
+msgid "Menu"
+msgstr ""
+
+#: ../main.c:104
+msgid "New plane arrived"
+msgstr ""
+
+#: ../main.c:107
+#, c-format
+msgid "Waiting: 0"
+msgstr ""
+
+#: ../main.c:137
+msgid "New plane to land"
+msgstr ""
+
+#: ../main.c:178
+msgid "New plane to take off"
+msgstr ""
+
+#: ../items.c:25
+msgid "Wang Jiezhe"
+msgstr ""
+
+#: ../items.c:83
+msgid ""
+"\n"
+"New plane added into waiting queue."
+msgstr ""
+
+#: ../items.c:84 ../items.c:160 ../items.c:254
+msgid ""
+"\n"
+"Flight No.: "
+msgstr ""
+
+#: ../items.c:86
+msgid ""
+"\n"
+"Remaining oil(/L): "
+msgstr ""
+
+#: ../items.c:89 ../items.c:234
+#, c-format
+msgid "Waiting: %d"
+msgstr ""
+
+#: ../items.c:126
+msgid "New Plane"
+msgstr ""
+
+#: ../items.c:128
+msgid "Ok"
+msgstr ""
+
+#: ../items.c:134
+msgid "Cancel"
+msgstr ""
+
+#: ../items.c:143
+msgid "Flight No. :"
+msgstr ""
+
+#: ../items.c:147
+msgid "Oil (/L) :"
+msgstr ""
+
+#: ../items.c:158
+msgid ""
+"\n"
+"A new plane is ready to take off"
+msgstr ""
+
+#: ../items.c:185 ../items.c:209
+msgid ""
+"\n"
+"Succeed!\n"
+" "
+msgstr ""
+
+#: ../items.c:226
+msgid ""
+"\n"
+"No plane is waiting for landing.\n"
+msgstr ""
+
+#: ../items.c:236
+msgid ""
+"\n"
+"A new plane is landing..."
+msgstr ""
+
+#: ../items.c:237
+msgid ""
+"\n"
+"Flight No. :"
+msgstr ""
+
+#: ../items.c:253
+msgid ""
+"\n"
+"A new plane is taking off..."
+msgstr ""
