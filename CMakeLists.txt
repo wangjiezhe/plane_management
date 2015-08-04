@@ -19,7 +19,7 @@ endif(GTK2_FOUND)
 
 find_package(Gettext)
 if(GETTEXT_FOUND)
-	GETTEXT_PROCESS_PO_FILES(ALL ${PROJECT_SOURCE_DIR}/po/zh_CN.po)
+	GETTEXT_PROCESS_PO_FILES(ALL ${CMAKE_SOURCE_DIR}/po/zh_CN.po)
 endif(GETTEXT_FOUND)
 
 find_package(Intl)

@@ -1,6 +1,6 @@
-include_directories(${PROJECT_SOURCE_DIR}/lib)
+include_directories(${CMAKE_SOURCE_DIR}/lib)
 set(APP_SRC main.c items.c)
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/bin)
 add_executable(main ${APP_SRC})
 target_link_libraries(main PriorityQueue Queue ${GTK2_LIBRARIES} ${Intl_LIBRARIES})
 set_target_properties(main PROPERTIES OUTPUT_NAME plane_management)
