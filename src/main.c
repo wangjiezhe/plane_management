@@ -4,7 +4,7 @@
 #include <string.h>
 #include <time.h>
 // #include <libintl.h>
-// #include <locale.h>
+#include <locale.h>
 #include "PriorityQueue.h"
 #include "Queue.h"
 #include "data.h"
@@ -31,7 +31,7 @@ gint main (gint argc, gchar *argv[]) {
 
 	signal (SIGALRM, alarm_handler);
 
-	// setlocale("LC_ALL", "");
+	setlocale(LC_ALL, "zh_CN.utf8");
 	bindtextdomain(PACKAGE, LOCALEDIR);
 	bindtextdomain(PACKAGE, "UTF-8");
 	textdomain(PACKAGE);

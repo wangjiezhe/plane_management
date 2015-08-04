@@ -11,7 +11,7 @@
 #define	t_db 10
 
 #define PACKAGE "plane_management"
-#define LOCALEDIR "./locale"
+#define LOCALEDIR "../po"
 // #define _(string) gettext(string)
 // #define N_(string) string
 

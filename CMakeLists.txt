@@ -1,0 +1,21 @@
+project(PLANE_MANAGEMENT C)
+cmake_minimum_required(VERSION 2.6)
+set(VERSION_MAJOR 1)
+set(VERSION_MINOR 1)
+set(VERSION_PATCH 2)
+
+add_definitions(-Wall -DG_DISABLE_DEPRECATED -DGDK_DISABLE_DEPRECATED -DGDK_PIXBUF_DISABLE_DEPRECATED -DGTK_DISABLE_DEPRECATED)
+
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(GTK2 REQUIRED gtk+-2.0)
+# pkg_check_modules(GTHREAD2 REQUIRED gthread-2.0)
+if(GTK2_FOUND)
+	include_directories(${GTK2_INCLUDE_DIRS})
+	link_directories(${GTK2_LIBRARY_DIRS})
+	add_definitions(${GTK2_CFLAGS_OTHER})
+else(GTK2_FOUND)
+	message(FATAL_ERROR "gtk+-2.0 not found!")
+endif(GTK2_FOUND)
+
+add_subdirectory(src)
+add_subdirectory(lib)
