@@ -1,5 +1,5 @@
 project(PLANE_MANAGEMENT C)
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.2)
 set(VERSION_MAJOR 1)
 set(VERSION_MINOR 1)
 set(VERSION_PATCH 2)
@@ -16,6 +16,16 @@ if(GTK2_FOUND)
 else(GTK2_FOUND)
 	message(FATAL_ERROR "gtk+-2.0 not found!")
 endif(GTK2_FOUND)
+
+find_package(Gettext)
+if(GETTEXT_FOUND)
+	GETTEXT_PROCESS_PO_FILES(ALL ${PROJECT_SOURCE_DIR}/po/zh_CN.po)
+endif(GETTEXT_FOUND)
+
+find_package(Intl)
+if(Intl_FOUND)
+	include_directories(${Intl_INCLUED_DIRS})
+endif(Intl_FOUND)
 
 add_subdirectory(src)
 add_subdirectory(lib)
